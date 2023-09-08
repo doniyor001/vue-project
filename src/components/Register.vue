@@ -4,6 +4,8 @@
             <img :src="logo" alt="logo" style="width: 100px; cursor: pointer" @click="toHomeHandler" />
             <h1 class="h3 mb-3 fw-normal mt-3">Register</h1>
 
+            <ValidationError v-if="validationErrors" :validationErrors="validationErrors"/>
+
             <Input :label="'Name'" :type="'text'" v-model="username" />
             <Input :label="'Email address'" :type="'email'" v-model="email" />
             <Input :label="'Password'" :type="'password'" v-model="password" />
@@ -18,10 +20,11 @@
 import {logo} from "@/contstants";
 import Button from "@/ui-components/Button.vue";
 import Input from "@/ui-components/Input.vue";
+import ValidationError from "@/components/ValidationError.vue";
 
 export default {
     name: "Register",
-    components: {Input, Button},
+    components: {Input, Button,ValidationError},
     data(){
         return{
             logo,
@@ -33,6 +36,9 @@ export default {
     computed:{
         isLoading(){
             return this.$store.state.auth.isLoading
+        },
+        validationErrors(){
+            return this.$store.state.auth.errors
         },
     },
     methods:{

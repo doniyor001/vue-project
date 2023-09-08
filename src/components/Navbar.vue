@@ -5,19 +5,31 @@
         </a>
 
         <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-            <RouterLink :to="{name: 'login'}" class="me-3 py-2 link-body-emphasis text-decoration-none">
-                    Login
-            </RouterLink>
 
-            <RouterLink :to="{name: 'register'}" class="me-3 py-2 link-body-emphasis text-decoration-none">
+            <template v-if="isLoggedIn">
+                <RouterLink :to="{name: 'home'}" class="me-3 py-2 link-body-emphasis text-decoration-none">
+                    {{user.username}}
+                </RouterLink>
+                <a href="#" class="me-3 py-2 link-body-emphasis text-decoration-none" @click='logout'>Logout</a>
+            </template>
+
+            <template v-if="isAnonymous">
+                <RouterLink :to="{name: 'login'}" class="me-3 py-2 link-body-emphasis text-decoration-none">
+                    Login
+                </RouterLink>
+
+                <RouterLink :to="{name: 'register'}" class="me-3 py-2 link-body-emphasis text-decoration-none">
                     Register
-            </RouterLink>
+                </RouterLink>
+            </template>
         </nav>
     </div>
 </template>
 
 <script>
 import {logo} from "@/contstants";
+import {mapGetters} from 'vuex'
+import {gettersTypes} from "@/modules/types"
 export default {
     name: "Navbar",
     data(){
@@ -25,11 +37,21 @@ export default {
             logo,
         }
     },
+    computed:{
+        ...mapGetters({
+            user: gettersTypes.user,
+            isLoggedIn: gettersTypes.isLoggedIn,
+            isAnonymous: gettersTypes.isAnonymous
+        }),
+    },
     methods:{
         toHomeHandler(){
             return this.$router.push({name: 'home'})
-        }
-    }
+        },
+        logout(){
+            return this.$store.dispatch('logout')
+        },
+    },
 }
 </script>
 
