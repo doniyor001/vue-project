@@ -6,7 +6,7 @@
 
 <script>
 import {Register} from '@/components'
-import {mapState} from 'vuex'
+
 export default {
     name: "RegisterView",
     components:{Register},
