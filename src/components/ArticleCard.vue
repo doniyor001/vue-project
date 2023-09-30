@@ -24,9 +24,23 @@
                 <div class="d-flex justify-content-between align-items-center card-footer">
                     <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-outline-secondary" @click='navigateHandler'>Read article</button>
-<!--                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
+                        <button v-if="article.author.username == user.username"
+                                type="button"
+                                class="btn btn-sm btn-outline-danger"
+                                @click="deleteArticleHandler"
+                        >Delete
+                        </button>
+
+                        <button v-if="article.author.username == user.username"
+                                type="button"
+                                class="btn btn-sm btn-outline-primary"
+                                @click="navigateEditHandler"
+                        >Edit
+                        </button>
+<!--                        :disabled="isLoading"-->
                     </div>
-                    <small class="text-body-secondary">{{new Date(article.createdAt).toLocaleDateString('us')}}</small>
+                    <small class="text-body-secondary">
+                        {{new Date(article.createdAt).toLocaleDateString('us')}}</small>
                 </div>
             </div>
         </div>
@@ -34,6 +48,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
     name: "ArticleCard",
     props:{
@@ -42,10 +57,24 @@ export default {
             required:true,
         },
     },
+    computed:{
+        ...mapState({
+            user: state => state.auth.user,
+            isLoading: state => state.control.isLoading,
+        })
+    },
     methods:{
         navigateHandler(){
             return this.$router.push(`/article/${this.article.slug}`)
-        }
+        },
+        deleteArticleHandler(){
+            return this.$store
+                .dispatch('deleteArticle', this.article.slug)
+                .then(() => this.$store.dispatch('articles'))
+        },
+        navigateEditHandler(){
+            return this.$router.push(`/edit-article/${this.article.slug}`)
+        },
     }
 }
 </script>
