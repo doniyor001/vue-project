@@ -4,7 +4,9 @@
             <Input type="text" label="Title" v-model="title"/>
             <TextArea type="text" label="Description" v-model="description"/>
             <TextArea type="text" label="Body" v-model="body"/>
-            <Button @click="editArticle">Edit Article</Button>
+            <Button @click="editArticle">
+                {{ clickText }}
+            </Button>
         </form>
     </div>
 </template>
@@ -13,6 +15,7 @@
 import TextArea from "@/ui-components/TextArea.vue";
 import Button from "@/ui-components/Button.vue";
 import Input from "@/ui-components/Input.vue";
+import {mapState} from 'vuex'
 
 export default {
     name: "ArticleForm",
@@ -26,13 +29,23 @@ export default {
             type: Function,
             required: true,
         },
+        clickText: {
+            type:String,
+            required: true,
+        }
     },
     data(){
         return{
             title: this.initialValue.title,
             description: this.initialValue.description,
             body: this.initialValue.body,
+            edit: false,
         }
+    },
+    computed:{
+        ...mapState({
+            isLoading: state => state.control.isLoading,
+        }),
     },
     methods:{
         editArticle() {

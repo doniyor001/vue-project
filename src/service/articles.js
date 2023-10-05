@@ -15,7 +15,7 @@ const ArticleService ={
     },
     updateArticle(article, slug){
         return axios.put(`/articles/${slug}`, {article})
-    }
+    },
 }
 
 export default ArticleService
